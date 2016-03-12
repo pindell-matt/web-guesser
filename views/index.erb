@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <style>
+      body {
+        background: <%= background %>;
+      }
+    </style>
+  </head>
   <body>
-    <p>
-      <%= message %>
-    </p>
     <form>
       <input type='text' name='guess' />
       <input type='submit' value='Guess!' />
     </form>
+    <p>
+      <%= message %>
+    </p>
+    <p>
+      <%= secret %>
+    </p>
   </body>
 </html>
