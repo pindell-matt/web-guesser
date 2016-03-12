@@ -38,10 +38,10 @@ def high_guess(guess)
 end
 
 def color_match(message)
-  unless win?(message)
-    message.include?("Way") ? "#E63838" : "#FF6666"
-  else
+  if win?(message)
     "#3EC5A0"
+  else
+    message.include?("Way") ? "#E63838" : "#FF6666"
   end
 end
 
