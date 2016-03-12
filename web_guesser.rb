@@ -2,6 +2,7 @@ require 'sinatra'
 require 'sinatra/reloader'
 
 SECRET_NUMBER = rand(100)
+@@guess_count = 5
 
 def check_guess(guess)
   guess = guess.to_i
@@ -12,8 +13,8 @@ def check_guess(guess)
   end
 end
 
-def cheat_mode_activated?
-  params["cheat"]
+def cheat_mode?
+  params["cheat"] == 'true'
 end
 
 def win?(message)
@@ -21,9 +22,7 @@ def win?(message)
 end
 
 def show_secret?(message)
-  if win?(message) || cheat_mode_activated?
-    "The SECRET NUMBER is #{SECRET_NUMBER}"
-  end
+  "The SECRET NUMBER is #{SECRET_NUMBER}" if win?(message) || cheat_mode?
 end
 
 def congrats_message
