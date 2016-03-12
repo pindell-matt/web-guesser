@@ -1,13 +1,13 @@
 require 'sinatra'
 require 'sinatra/reloader'
 
-SECRET_NUMBER = rand(100)
-@@guess_count = 5
+@@secret_number = rand(100)
+@@guess_count   = 5
 
 def check_guess(guess)
   guess = guess.to_i
-  unless guess == SECRET_NUMBER
-    guess > SECRET_NUMBER ? high_guess(guess) : low_guess(guess)
+  unless guess == @@secret_number
+    guess > @@secret_number ? high_guess(guess) : low_guess(guess)
   else
     congrats_message
   end
@@ -22,7 +22,7 @@ def win?(message)
 end
 
 def show_secret?(message)
-  "The SECRET NUMBER is #{SECRET_NUMBER}" if win?(message) || cheat_mode?
+  "The SECRET NUMBER is #{@@secret_number}" if win?(message) || cheat_mode?
 end
 
 def congrats_message
@@ -30,11 +30,11 @@ def congrats_message
 end
 
 def low_guess(guess)
-  guess < (SECRET_NUMBER - 5) ? "Way Too Low!" : "Too Low!"
+  guess < (@@secret_number - 5) ? "Way Too Low!" : "Too Low!"
 end
 
 def high_guess(guess)
-  guess > (SECRET_NUMBER + 5) ? "Way Too High!" : "Too High!"
+  guess > (@@secret_number + 5) ? "Way Too High!" : "Too High!"
 end
 
 def color_match(message)
@@ -45,11 +45,30 @@ def color_match(message)
   end
 end
 
+def new_game
+  @@secret_number = rand(100)
+  @@guess_count   = 5
+end
+
+def check_game_status(message)
+  @@guess_count -= 1
+  if @@guess_count == 0
+    new_game
+    message = "You Failed! A New SECRET NUMBER has been generated."
+  elsif win?(message)
+    new_game
+    message
+  else
+    message
+  end
+end
+
 get '/' do
   guess      = params["guess"]
   message    = check_guess(guess)
   background = color_match(message)
   secret     = show_secret?(message)
+  message    = check_game_status(message)
   erb :index, locals: {
                         message: message,
                         secret: secret,
