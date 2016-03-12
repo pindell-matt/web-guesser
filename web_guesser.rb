@@ -65,10 +65,10 @@ end
 
 get '/' do
   guess      = params["guess"]
-  message    = check_guess(guess)
-  background = color_match(message)
-  secret     = show_secret?(message)
-  message    = check_game_status(message)
+  submitted  = check_guess(guess)
+  background = color_match(submitted)
+  secret     = show_secret?(submitted)
+  message    = check_game_status(submitted)
   erb :index, locals: {
                         message: message,
                         secret: secret,
